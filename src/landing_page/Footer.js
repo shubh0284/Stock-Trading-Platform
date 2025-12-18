@@ -151,7 +151,10 @@ function Footer() {
           <br />
         </div>
       </div>
-      <div className="comtainer mt-5 text-muted" style={{ fontSize: "14px" }}>
+      <div
+        className="comtainer mt-5 p-5 text-muted"
+        style={{ fontSize: "14px" }}
+      >
         <p>
           Zerodha Broking Ltd.: Member of NSE, BSE​ &​ MCX – SEBI Registration
           no.: INZ000031633 CDSL/NSDL: Depository services through Zerodha
