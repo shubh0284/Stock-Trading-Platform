@@ -19,7 +19,7 @@ function Footer() {
             <a
               href=""
               className="text-muted "
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
             >
               About
             </a>
@@ -28,7 +28,7 @@ function Footer() {
             <a
               href=""
               className="text-muted "
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
             >
               Products
             </a>
@@ -36,7 +36,7 @@ function Footer() {
             <a
               href=""
               className="text-muted"
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
             >
               Pricing
             </a>
@@ -44,7 +44,7 @@ function Footer() {
             <a
               href=""
               className="text-muted"
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
             >
               Referral programme
             </a>
@@ -52,7 +52,7 @@ function Footer() {
             <a
               href=""
               className="text-muted"
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
             >
               Careers
             </a>
@@ -60,7 +60,7 @@ function Footer() {
             <a
               href=""
               className="text-muted"
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
             >
               Zerodha.tech
             </a>
@@ -68,7 +68,7 @@ function Footer() {
             <a
               href=""
               className="text-muted"
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
             >
               Press & media
             </a>
@@ -76,7 +76,7 @@ function Footer() {
             <a
               href=""
               className="text-muted"
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
             >
               Zerodha cares (CSR)
             </a>
@@ -87,7 +87,7 @@ function Footer() {
             <a
               href=""
               className="text-muted"
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
             >
               Contact
             </a>
@@ -95,7 +95,7 @@ function Footer() {
             <a
               href=""
               className="text-muted"
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
             >
               Support portal
             </a>
@@ -103,7 +103,7 @@ function Footer() {
             <a
               href=""
               className="text-muted"
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
             >
               Z-Connect blog
             </a>
@@ -111,7 +111,7 @@ function Footer() {
             <a
               href=""
               className="text-muted"
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
             >
               List of charge
             </a>
@@ -119,7 +119,7 @@ function Footer() {
             <a
               href=""
               className="text-muted"
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
             >
               Downloads & resources
             </a>
@@ -131,19 +131,23 @@ function Footer() {
             <a
               href=""
               className="text-muted"
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
             >
               Open an account
             </a>
             <br />
-            <a href="" className="text-muted text-decoration-none">
+            <a
+              href=""
+              className="text-muted "
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
+            >
               Fund transfer
             </a>
             <br />
             <a
               href=""
               className="text-muted"
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none", lineHeight: "2.0" }}
             >
               60 day challenge
             </a>
