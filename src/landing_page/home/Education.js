@@ -15,14 +15,14 @@ function Education() {
             covering everything from the basics to advanced trading.
           </p>
           <a href="" style={{ textDecoration: "none" }}>
-            Versity<i class="fas fa-angle-double-right"></i>
+            Versity <i class="far fa-hand-point-right"></i>
           </a>
           <p className="mt-5">
             TradingQ&A, the most active trading and investment community in
             India for all your market related queries.
           </p>
           <a href="" style={{ textDecoration: "none" }}>
-            TradingQ&A<i class="fas fa-angle-double-right"></i>
+            Trading Q&A <i class="far fa-hand-point-right"></i>
           </a>
         </div>
       </div>
