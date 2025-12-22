@@ -7,5 +7,14 @@
   },
   "author": "Shubham Shinare",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "body-parser": "^2.2.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "mongoose": "^8.20.4",
+    "passport": "^0.7.0",
+    "passport-local-mongoose": "^9.0.1"
+  }
 }
