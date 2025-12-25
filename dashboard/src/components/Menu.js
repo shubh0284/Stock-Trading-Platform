@@ -14,7 +14,7 @@ const Menu = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.get("http://localhost:3002/logout", {
+      await axios.get(`${process.env.REACT_APP_API_URL}/logout`, {
         withCredentials: true,
       });
       window.location.href = "http://localhost:3000/";

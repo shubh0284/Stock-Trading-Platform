@@ -21,7 +21,7 @@ const Dashboard = () => {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const res = await axios.get("http://localhost:3002/verify", {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/verify`, {
           withCredentials: true,
         });
 

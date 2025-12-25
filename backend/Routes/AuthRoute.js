@@ -13,6 +13,7 @@ router.get("/logout", (req, res) => {
     httpOnly: true,
     sameSite: "lax",
     secure: false,
+    path: "/",
   });
 
   return res.status(200).json({ success: true });
