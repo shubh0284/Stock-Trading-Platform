@@ -14,12 +14,21 @@ const Menu = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.get(`${process.env.REACT_APP_API_URL}/logout`, {
-        withCredentials: true,
+      // ✅ Use fallback URL if process.env is not defined
+      const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3002";
+
+      await axios.get(`${apiUrl}/logout`, {
+        withCredentials: true, // ✅ Required to send/clear cookies
       });
-      window.location.href = "http://localhost:3000/";
+
+      // ✅ Clear local storage and redirect to port 3000
+      localStorage.removeItem("username");
+      window.location.href = "http://localhost:3000/login";
     } catch (error) {
-      console.log("Logout failed");
+      console.log("Logout failed", error);
+      // Fallback: clear local storage and redirect anyway
+      localStorage.removeItem("username");
+      window.location.href = "http://localhost:3000/login";
     }
   };
 
@@ -38,10 +47,14 @@ const Menu = () => {
 
         .menu {
           padding: 10px;
+          text-decoration: none;
+          color: #444;
+          display: block;
         }
 
         .menu.selected {
           font-weight: bold;
+          color: #2563eb;
         }
 
         .profile {

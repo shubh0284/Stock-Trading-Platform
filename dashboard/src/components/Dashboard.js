@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-// Dashboard pages
+// Pages
 import Apps from "./Apps";
 import Funds from "./Funds";
 import Holdings from "./Holdings";
@@ -16,61 +16,59 @@ import { GeneralContextProvider } from "./GeneralContext";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  /* ---------- AUTH CHECK ---------- */
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/verify`, {
-          withCredentials: true,
+        // 1. Ensure the URL is explicitly correct for Docker networking
+        // If process.env.REACT_APP_API_URL is undefined, it defaults to localhost:3002
+        const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3002";
+
+        const res = await axios.get(`${apiUrl}/verify`, {
+          withCredentials: true, // ⚠️ CRITICAL: Sends the 'token' cookie to the backend
         });
 
-        // ✅ accept any truthy auth flag
-        if (
-          !res.data ||
-          res.data.status === false ||
-          res.data.authenticated === false
-        ) {
-          window.location.href = "http://localhost:3000/signup";
-          return;
+        // 2. Check if the backend verification was successful
+        if (res.data && res.data.status === true) {
+          setLoading(false);
+        } else {
+          // If status is false, clear any stale local data and redirect
+          localStorage.removeItem("username");
+          window.location.href = "http://localhost:3000/login";
         }
-
-        setLoading(false);
-      } catch (error) {
-        window.location.href = "http://localhost:3000/signup";
+      } catch (err) {
+        console.error("Dashboard Verification Error:", err);
+        // On error (401, 500, or network fail), redirect to login/signup
+        localStorage.removeItem("username");
+        window.location.href = "http://localhost:3000/login";
       }
     };
 
     verifyUser();
-  }, []);
+  }, [navigate]);
 
-  const logout = async () => {
-    try {
-      await axios.get("http://localhost:3002/logout", {
-        withCredentials: true,
-      });
-
-      window.location.href = "http://localhost:3000/signup";
-    } catch (error) {
-      console.error("Logout failed");
-    }
-  };
-
-  /* ---------- LOADING ---------- */
+  // 3. Loading State (Prevents the dashboard content from flashing before check is done)
   if (loading) {
     return (
-      <div style={{ textAlign: "center", marginTop: "100px" }}>
-        <h2>Checking authentication...</h2>
+      <div
+        style={{
+          textAlign: "center",
+          marginTop: "100px",
+          fontFamily: "sans-serif",
+          color: "#666",
+        }}
+      >
+        <h2>Authenticating...</h2>
+        <p>Please wait while we verify your session.</p>
       </div>
     );
   }
 
-  /* ---------- DASHBOARD ---------- */
   return (
     <div className="dashboard-container">
       <GeneralContextProvider>
         <WatchList />
-
         <div className="content">
           <Routes>
             <Route path="/" element={<Summary />} />

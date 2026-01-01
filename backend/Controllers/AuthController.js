@@ -5,13 +5,11 @@ const { createSecretToken } = require("../util/SecretToken");
 // ---------------- SIGNUP ----------------
 module.exports.Signup = async (req, res) => {
   try {
-    console.log("REQ.BODY:", req.body); // 🔍 Debug: check incoming data
+    console.log("REQ.BODY (Signup):", req.body);
 
-    // Safe destructure with default
     const { email, username, password } = req.body || {};
 
     if (!email || !username || !password) {
-      console.log("Missing fields:", { email, username, password }); // 🔍 Debug
       return res
         .status(400)
         .json({ success: false, message: "All fields are required" });
@@ -24,21 +22,24 @@ module.exports.Signup = async (req, res) => {
         .json({ success: false, message: "User already exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    /** * ⚠️ CHANGE MADE HERE:
+     * We REMOVED 'const hashedPassword = await bcrypt.hash(password, 10);'
+     * We pass the PLAIN password to User.create.
+     * Your UserModel.js will handle the hashing automatically via the .pre("save") hook.
+     */
     const user = await User.create({
       email,
       username,
-      password: hashedPassword,
+      password, // Plain text here
     });
 
     const token = createSecretToken(user._id);
 
-    // Set cookie
     res.cookie("token", token, {
       httpOnly: true,
       sameSite: "lax",
       path: "/",
-      secure: false, // set true if HTTPS
+      secure: false, // Must be false for Localhost/Docker HTTP
     });
 
     res.status(201).json({
@@ -47,7 +48,7 @@ module.exports.Signup = async (req, res) => {
       username: user.username,
     });
   } catch (err) {
-    console.error("Signup error:", err); // Full error log
+    console.error("Signup error:", err);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
@@ -55,37 +56,44 @@ module.exports.Signup = async (req, res) => {
 // ---------------- LOGIN ----------------
 module.exports.Login = async (req, res) => {
   try {
-    console.log("REQ.BODY:", req.body); // 🔍 Debug
+    console.log("REQ.BODY (Login):", req.body);
 
     const { email, password } = req.body || {};
 
     if (!email || !password) {
-      console.log("Missing login fields:", { email, password }); // 🔍 Debug
       return res
         .status(400)
         .json({ success: false, message: "Email and password are required" });
     }
 
     const user = await User.findOne({ email });
-    if (!user)
+    if (!user) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid credentials" });
+    }
 
+    /**
+     * bcrypt.compare takes:
+     * 1. The plain text password from the login form
+     * 2. The hashed password stored in the database
+     */
     const auth = await bcrypt.compare(password, user.password);
-    if (!auth)
+
+    if (!auth) {
+      console.log("❌ Password mismatch for:", email);
       return res
         .status(400)
         .json({ success: false, message: "Invalid credentials" });
+    }
 
     const token = createSecretToken(user._id);
 
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "lax",
       secure: false,
-      path: "/",
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({
@@ -94,7 +102,7 @@ module.exports.Login = async (req, res) => {
       username: user.username,
     });
   } catch (err) {
-    console.error("Login error:", err); // Full error log
+    console.error("Login error:", err);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
