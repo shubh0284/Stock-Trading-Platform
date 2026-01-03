@@ -20,10 +20,14 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ~
-            if [ ! -d "stock-app" ]; then
-              git clone https://github.com/${{ github.repository }} stock-app
-            fi
+            # 1. Forcefully remove any old folder to prevent 'Exit Code 128' errors
+            sudo rm -rf stock-app
+
+            # 2. Clone the repository using the public HTTPS link
+            # This avoids SSH permission issues on the EC2 server
+            git clone https://github.com/shubh0284/Stock-Trading-Platform.git stock-app
+
+            # 3. Enter folder and deploy
             cd stock-app
-            git pull origin main
             docker compose down
             docker compose up -d --build
