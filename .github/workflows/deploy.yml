@@ -20,15 +20,23 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ~
-            # 1. Clear old data and clone fresh to ensure no folder mismatches
-            sudo rm -rf stock-app
-            git clone https://github.com/shubh0284/Stock-Trading-Platform.git stock-app
-            cd stock-app
+            # 1. Create base folder if missing
+            mkdir -p stock-app
 
-            # 2. DEBUG: This will show us if the Dockerfile is actually there
-            echo "--- Debug: Listing files in frontend folder ---"
-            ls -a frontend
+            # 2. Update code and preserve .env
+            if [ -d "stock-app/.git" ]; then
+              cd stock-app
+              git fetch --all
+              git reset --hard origin/main
+            else
+              # Backup .env before re-cloning
+              [ -f stock-app/backend/.env ] && cp stock-app/backend/.env ~/.env.bak
+              rm -rf stock-app
+              git clone https://github.com/shubh0284/Stock-Trading-Platform.git stock-app
+              cd stock-app
+              [ -f ~/.env.bak ] && mkdir -p backend && mv ~/.env.bak backend/.env
+            fi
 
-            # 3. Build and Start
-            sudo docker compose down || true
-            sudo docker compose up -d --build
+            # 3. Final Build and Start
+            # Using COMPOSE_BAKE=false helps bypass strict buildx version checks
+            sudo COMPOSE_BAKE=false docker compose up -d --build
