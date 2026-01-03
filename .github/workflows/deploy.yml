@@ -20,18 +20,21 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ~
-            # 1. Create the folder if it doesn't exist
+            # 1. Ensure the directory exists
             mkdir -p stock-app
 
-            # 2. Update code WITHOUT deleting the .env file you just made
+            # 2. Update code. If it fails, delete and re-clone for a fresh start.
             if [ -d "stock-app/.git" ]; then
               cd stock-app
-              git pull origin main
+              git fetch --all
+              git reset --hard origin/main
             else
+              rm -rf stock-app
               git clone https://github.com/shubh0284/Stock-Trading-Platform.git stock-app
               cd stock-app
             fi
 
             # 3. Build and Start
-            docker compose down || true
-            docker compose up -d --build
+            # We use sudo here to ensure permissions are correct during the build
+            sudo docker compose down || true
+            sudo docker compose up -d --build
