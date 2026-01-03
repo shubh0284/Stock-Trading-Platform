@@ -20,21 +20,15 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ~
-            # 1. Ensure the directory exists
-            mkdir -p stock-app
+            # 1. Clear old data and clone fresh to ensure no folder mismatches
+            sudo rm -rf stock-app
+            git clone https://github.com/shubh0284/Stock-Trading-Platform.git stock-app
+            cd stock-app
 
-            # 2. Update code. If it fails, delete and re-clone for a fresh start.
-            if [ -d "stock-app/.git" ]; then
-              cd stock-app
-              git fetch --all
-              git reset --hard origin/main
-            else
-              rm -rf stock-app
-              git clone https://github.com/shubh0284/Stock-Trading-Platform.git stock-app
-              cd stock-app
-            fi
+            # 2. DEBUG: This will show us if the Dockerfile is actually there
+            echo "--- Debug: Listing files in frontend folder ---"
+            ls -a frontend
 
             # 3. Build and Start
-            # We use sudo here to ensure permissions are correct during the build
             sudo docker compose down || true
             sudo docker compose up -d --build
